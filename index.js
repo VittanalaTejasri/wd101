@@ -7,6 +7,11 @@ document.getElementById("registrationForm").addEventListener("submit", function 
     const dob = document.getElementById("dob").value;
     const termsAccepted = document.getElementById("terms").checked;
 
+    if (!isValidEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
     if (!isValidAge(dob)) {
         alert("Age must be between 18 and 55 years.");
         return;
@@ -17,13 +22,18 @@ document.getElementById("registrationForm").addEventListener("submit", function 
         email: email,
         password: password,
         dob: dob,
-        termsAccepted: termsAccepted ? "True" : "False"
+        termsAccepted: termsAccepted ? "true" : "false"
     };
 
     saveEntry(entry);
     addEntryToTable(entry);
     this.reset(); // Reset the form after submission
 });
+
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
 
 function isValidAge(dob) {
     const birthDate = new Date(dob);
@@ -55,9 +65,8 @@ function addEntryToTable(entry) {
 }
 
 function loadEntries() {
-   const entries = JSON.parse(localStorage.getItem("entries")) || [];
+    const entries = JSON.parse(localStorage.getItem("entries")) || [];
     entries.forEach(addEntryToTable);
-
 }
 
 // Load saved entries when the page loads
